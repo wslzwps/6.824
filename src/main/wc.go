@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"mapreduce"
 	"os"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 //
@@ -17,18 +17,18 @@ import (
 //
 func mapF(filename string, contents string) []mapreduce.KeyValue {
 	// Your code here (Part II).
-	words:=strings.FieldsFunc(contents, func(ch rune) bool {
-		if ch >= 'A' && ch<='Z'{
+	words := strings.FieldsFunc(contents, func(ch rune) bool {
+		if ch >= 'A' && ch <= 'Z' {
 			return false
-		}else if ch >= 'a' && ch<='z'{
+		} else if ch >= 'a' && ch <= 'z' {
 			return false
 		}
 		return true
 	})
 
-	kvs:=make([]mapreduce.KeyValue,0)
-	for _,word:=range words{
-		kvs=append(kvs,mapreduce.KeyValue{word,"1"})
+	kvs := make([]mapreduce.KeyValue, 0)
+	for _, word := range words {
+		kvs = append(kvs, mapreduce.KeyValue{word, "1"})
 	}
 
 	return kvs
@@ -41,16 +41,16 @@ func mapF(filename string, contents string) []mapreduce.KeyValue {
 //
 func reduceF(key string, values []string) string {
 	// Your code here (Part II).
-	count:=int64(0)
-	for _,value:=range values{
-		if preCount,err:=strconv.ParseInt(value,10,64);err!=nil{
+	count := int64(0)
+	for _, value := range values {
+		if preCount, err := strconv.ParseInt(value, 10, 64); err != nil {
 			continue
-		}else{
-			count=count+preCount
+		} else {
+			count = count + preCount
 		}
 	}
 
-	return strconv.FormatInt(count,10)
+	return strconv.FormatInt(count, 10)
 }
 
 // Can be run in 3 ways:

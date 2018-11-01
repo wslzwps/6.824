@@ -4,8 +4,8 @@ import "os"
 import "fmt"
 import (
 	"mapreduce"
-	"strings"
 	"sort"
+	"strings"
 )
 
 // The mapping function is called once for each piece of the input.
@@ -14,17 +14,17 @@ import (
 // key/value pairs, each represented by a mapreduce.KeyValue.
 func mapF(document string, value string) (res []mapreduce.KeyValue) {
 	// Your code here (Part V).
-	words:=strings.FieldsFunc(value, func(ch rune) bool {
-		if ch >= 'A' && ch<='Z'{
+	words := strings.FieldsFunc(value, func(ch rune) bool {
+		if ch >= 'A' && ch <= 'Z' {
 			return false
-		}else if ch >= 'a' && ch<='z'{
+		} else if ch >= 'a' && ch <= 'z' {
 			return false
 		}
 		return true
 	})
 
-	for _,word:=range words{
-		res=append(res,mapreduce.KeyValue{word,document})
+	for _, word := range words {
+		res = append(res, mapreduce.KeyValue{word, document})
 	}
 
 	return
@@ -35,23 +35,23 @@ func mapF(document string, value string) (res []mapreduce.KeyValue) {
 // should be a single output value for that key.
 func reduceF(key string, values []string) string {
 	// Your code here (Part V).
-	valueSet:=make(map[string]struct{})
-	for _,value:=range values{
-		valueSet[value]=struct{}{}
+	valueSet := make(map[string]struct{})
+	for _, value := range values {
+		valueSet[value] = struct{}{}
 	}
 
-	nonRepetStrings :=make([]string,0)
-	for k,_:=range  valueSet{
-		nonRepetStrings =append(nonRepetStrings,k)
+	nonRepetStrings := make([]string, 0)
+	for k, _ := range valueSet {
+		nonRepetStrings = append(nonRepetStrings, k)
 	}
 	sort.Strings(nonRepetStrings)
 
 	result := nonRepetStrings[0]
-	for i:=1;i<len(nonRepetStrings);i++{
-		result = result +","+ nonRepetStrings[i]
+	for i := 1; i < len(nonRepetStrings); i++ {
+		result = result + "," + nonRepetStrings[i]
 	}
 
-	return fmt.Sprintf("%d %s",len(nonRepetStrings), result)
+	return fmt.Sprintf("%d %s", len(nonRepetStrings), result)
 
 }
 
