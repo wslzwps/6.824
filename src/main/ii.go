@@ -40,18 +40,18 @@ func reduceF(key string, values []string) string {
 		valueSet[value]=struct{}{}
 	}
 
-	strs:=make([]string,0)
+	nonRepetStrings :=make([]string,0)
 	for k,_:=range  valueSet{
-		strs=append(strs,k)
+		nonRepetStrings =append(nonRepetStrings,k)
 	}
-	sort.Strings(strs)
+	sort.Strings(nonRepetStrings)
 
-	result :=strs[0]
-	for i:=1;i<len(strs);i++{
-		result = result +","+strs[i]
+	result := nonRepetStrings[0]
+	for i:=1;i<len(nonRepetStrings);i++{
+		result = result +","+ nonRepetStrings[i]
 	}
 
-	return fmt.Sprintf("%d %s",len(strs), result)
+	return fmt.Sprintf("%d %s",len(nonRepetStrings), result)
 
 }
 
