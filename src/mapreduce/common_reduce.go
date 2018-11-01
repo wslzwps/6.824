@@ -1,8 +1,8 @@
 package mapreduce
 
 import (
-	"os"
 	"encoding/json"
+	"os"
 )
 
 func doReduce(
@@ -50,29 +50,29 @@ func doReduce(
 	// Your code here (Part I).
 	//
 
-	keyMap :=make(map[string][]string,0)
-	for i:=0;i<nMap;i++{
-		intermediateName:=reduceName(jobName,i,reduceTask)
-		midFile,err:=os.OpenFile(intermediateName,os.O_CREATE|os.O_RDWR,0755)
-		if err!=nil{
+	keyMap := make(map[string][]string, 0)
+	for i := 0; i < nMap; i++ {
+		intermediateName := reduceName(jobName, i, reduceTask)
+		midFile, err := os.OpenFile(intermediateName, os.O_CREATE|os.O_RDWR, 0755)
+		if err != nil {
 			return
 		}
-		dnc:=json.NewDecoder(midFile)
+		dnc := json.NewDecoder(midFile)
 		for {
 			var kv KeyValue
 
-			err=dnc.Decode(&kv)
-			if err!=nil {
+			err = dnc.Decode(&kv)
+			if err != nil {
 				break
 			}
 
-			if val,ok:= keyMap[kv.Key];!ok {
-				v:=make([]string,0)
-				v=append(v,kv.Value)
-				keyMap[kv.Key]=v
-			}else {
-				val=append(val,kv.Value)
-				keyMap[kv.Key]=val
+			if val, ok := keyMap[kv.Key]; !ok {
+				v := make([]string, 0)
+				v = append(v, kv.Value)
+				keyMap[kv.Key] = v
+			} else {
+				val = append(val, kv.Value)
+				keyMap[kv.Key] = val
 			}
 		}
 
@@ -80,13 +80,13 @@ func doReduce(
 	}
 	//fmt.Println("in doReduce:",keyMap)
 
-	f,err:=os.OpenFile(outFile,os.O_CREATE|os.O_RDWR,0755)
-	if err!=nil {
+	f, err := os.OpenFile(outFile, os.O_CREATE|os.O_RDWR, 0755)
+	if err != nil {
 		return
 	}
 	enc := json.NewEncoder(f)
-	for k,v:=range keyMap {
-		enc.Encode(KeyValue{k,reduceF(k,v)})
+	for k, v := range keyMap {
+		enc.Encode(KeyValue{k, reduceF(k, v)})
 	}
 	f.Close()
 }
